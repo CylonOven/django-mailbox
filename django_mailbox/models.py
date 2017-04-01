@@ -34,6 +34,7 @@ from django_mailbox.transports import Pop3Transport, ImapTransport, \
     MaildirTransport, MboxTransport, BabylTransport, MHTransport, \
     MMDFTransport, GmailImapTransport
 
+from lino.api import dd
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class ActiveMailboxManager(models.Manager):
         )
 
 
-class Mailbox(models.Model):
+class Mailbox(dd.Model):
     name = models.CharField(
         _(u'Name'),
         max_length=255,
@@ -419,7 +420,7 @@ class UnreadMessageManager(models.Manager):
         )
 
 
-class Message(models.Model):
+class Message(dd.Model):
 
     class Meta:
         verbose_name = _("Message")
@@ -503,6 +504,12 @@ class Message(models.Model):
     unread_messages = UnreadMessageManager()
     incoming_messages = IncomingMessageManager()
     outgoing_messages = OutgoingMessageManager()
+
+    _disabled_fields = "body eml mailbox message_id subject to_header read processed in_reply_to from_header encoded outgoing"
+
+    def disabled_fields(self, ar):
+        return self._disabled_fields.split()
+
 
     @property
     def address(self):
@@ -713,7 +720,7 @@ class Message(models.Model):
         return self.subject
 
 
-class MessageAttachment(models.Model):
+class MessageAttachment(dd.Model):
     message = models.ForeignKey(
         Message,
         related_name='attachments',
