@@ -34,7 +34,6 @@ from django_mailbox.transports import Pop3Transport, ImapTransport, \
     MaildirTransport, MboxTransport, BabylTransport, MHTransport, \
     MMDFTransport, GmailImapTransport
 
-from lino.core.fields import NullCharField
 
 logger = logging.getLogger(__name__)
 
@@ -494,6 +493,12 @@ class Message(models.Model):
         upload_to="messages",
         help_text=_(u'Original full content of message')
     )
+
+    spam = models.BooleanField(
+        _("Spam"),
+        default=False
+    )
+
     objects = models.Manager()
     unread_messages = UnreadMessageManager()
     incoming_messages = IncomingMessageManager()
