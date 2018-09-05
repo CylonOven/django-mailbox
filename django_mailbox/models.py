@@ -426,7 +426,7 @@ class Message(dd.Model):
         verbose_name = _("Message")
         verbose_name_plural = _("Messages")
 
-    mailbox = models.ForeignKey(
+    mailbox = dd.ForeignKey(
         Mailbox,
         related_name='messages',
         verbose_name=_(u'Mailbox'),
@@ -442,7 +442,7 @@ class Message(dd.Model):
         max_length=255
     )
 
-    in_reply_to = models.ForeignKey(
+    in_reply_to = dd.ForeignKey(
         'django_mailbox.Message',
         related_name='replies',
         blank=True,
@@ -721,7 +721,7 @@ class Message(dd.Model):
 
 
 class MessageAttachment(dd.Model):
-    message = models.ForeignKey(
+    message = dd.ForeignKey(
         Message,
         related_name='attachments',
         null=True,
